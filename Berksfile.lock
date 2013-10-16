@@ -1,0 +1,21 @@
+{
+  "sources": {
+    "base": {
+      "locked_version": "1.0.0",
+      "git": "git://github.com/zimbatm/base-cookbook.git",
+      "ref": "401d854dbadf6eea4c912c698e5534f9ed09467c"
+    },
+    "apt": {
+      "locked_version": "2.2.0"
+    },
+    "logrotate": {
+      "locked_version": "1.3.0"
+    },
+    "openssh": {
+      "locked_version": "1.2.0"
+    },
+    "iptables": {
+      "locked_version": "0.12.0"
+    }
+  }
+}

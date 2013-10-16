@@ -1,0 +1,8 @@
+{
+  "aws_account_id": "XXXX-XXXX-XXXX",
+  "aws_access_key": "AKIXXXXXXXXXXXXXXXXXX,
+  "aws_secret_key": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "aws_cert_path":  "cert-XXX.pem",
+  "aws_key_path":   "pk-XXX.pem",
+  "aws_s3_bucket":  "packer-boxes-bucket"
+}
