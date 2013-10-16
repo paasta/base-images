@@ -6,6 +6,8 @@ if [ "$PACKER_BUILDER_TYPE" != "virtualbox" ]; then
   exit 0
 fi
 
+export DEBIAN_FRONTEND='noninteractive'
+
 # Without libdbus virtualbox would not start automatically after compile
 apt-get install -y --no-install-recommends libdbus-1-3
 apt-get install -y dkms linux-headers-$(uname -r)

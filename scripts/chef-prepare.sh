@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+export DEBIAN_FRONTEND='noninteractive'
+
 # Install chef
 apt-get install -y curl
 curl -L https://www.opscode.com/chef/install.sh | bash -s -- -v 11.6.0

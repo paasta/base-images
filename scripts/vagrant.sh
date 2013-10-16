@@ -6,6 +6,8 @@ if [ "$PACKER_BUILDER_TYPE" != "virtualbox" ] && [ "$PACKER_BUILDER_TYPE" != "vm
   exit 0
 fi
 
+export DEBIAN_FRONTEND='noninteractive'
+
 # Set up sudo
 echo %vagrant ALL=NOPASSWD:ALL > /etc/sudoers.d/vagrant
 chmod 0440 /etc/sudoers.d/vagrant
