@@ -1,7 +1,9 @@
-MediaCore base image
-====================
+MediaCore images
+================
 
-Creates a base ubuntu image to use on Vagrant and EC2
+Project to create images to use in Vagrant and EC2.
+
+Creates ubuntu image to use on Vagrant and EC2.
 
 
 ```
@@ -32,3 +34,5 @@ TODO
 
 Fix the amazon-instance build <-- next packer update will have it
 
+# cloud-init config example
+http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/view/head:/doc/examples/cloud-config.txt

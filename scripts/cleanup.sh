@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # Remove items used for building, since they aren't needed anymore
 echo "*** removing unnessary packages"
 aptitude search ~i | grep linux-headers- | cut -d ' ' -f 2 | xargs dpkg -r
-apt-get -y autoremove
+apt-get -qy autoremove
 aptitude purge -y ~c
 apt-get clean
 

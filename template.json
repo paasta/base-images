@@ -50,7 +50,8 @@
       "x509_cert_path": "{{user `aws_cert_path`}}",
       "x509_key_path": "{{user `aws_key_path`}}",
       "ssh_username": "ubuntu",
-      "bundle_destination": "/mnt"
+      "bundle_destination": "/mnt",
+      "user_data_file": "cloud-init"
     },
     {
       "type": "amazon-ebs",
@@ -60,7 +61,8 @@
       "region": "{{user `aws_region`}}",
       "source_ami": "{{user `aws_source_ami_ebs`}}",
       "instance_type": "{{user `aws_instance_type`}}",
-      "ssh_username": "ubuntu"
+      "ssh_username": "ubuntu",
+      "user_data_file": "cloud-init"
     },
     {
       "type": "virtualbox",
