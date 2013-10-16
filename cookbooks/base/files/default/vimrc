@@ -1,0 +1,112 @@
+"""
+" We need to build a consensus on the options we want. Priority goes to the
+" people using the machines oftenly.
+"""
+
+" Global
+set nocompatible "no vi emulation
+set encoding=utf-8
+set ttyfast "send more characters for redraw
+
+" Status line
+set ruler
+set scrolloff=2
+set laststatus=2
+
+" TMP
+set dir=~/.vim/swap
+set nobackup     "VCS already does that
+set nowritebackup
+set autowrite  " automatically write a buffer when leaving
+set autowriteall  " automatically write a buffer when editing
+set hidden " don't annoy me with unsaved buffers
+
+" Search
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" Whitespace stuff
+set wrap
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set nosmarttab
+set autoindent
+"set list listchars=tab:\ \ ,trail:·
+set list listchars=tab:»·,trail:·
+" http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+
+" tab completion
+set wildmenu
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.direnv
+" disable archive files
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+set complete=.,w,b
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+" Write the file as sudoer
+cmap w!! w !sudo tee % >/dev/null
+
+set background=dark
+colorscheme zellner
+syntax enable
+
+if has("autocmd")
+  filetype plugin on
+  filetype indent on
+
+  " make and python use real tabs
+  autocmd FileType make                                     set noexpandtab
+  autocmd FileType python                                   set tabstop=8
+  autocmd FileType python                                   set softtabstop=4
+  autocmd FileType python                                   set shiftwidth=4
+  autocmd FileType python                                   set expandtab
+  autocmd FileType jinja2                                   set noexpandtab
+  autocmd FileType jinja2                                   set tabstop=4
+  autocmd FileType go                                       set noexpandtab
+
+  " Thorfile, Rakefile and Gemfile are Ruby
+  autocmd BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set filetype=ruby
+
+  autocmd BufRead,BufNewFile *.jinja2 set filetype=jinja2
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event
+  " handler (happens when dropping a file on gvim).
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+  function! s:setupWrapping()
+    set wrap
+    set wrapmargin=2
+    set textwidth=72
+  endfunction
+
+  function! s:setupMarkup()
+    set filetype=markdown
+    call s:setupWrapping()
+    map <buffer> <Leader>p :Mm <CR>
+  endfunction
+  " md, markdown, and mk are markdown and define buffer-local preview
+  autocmd BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
+  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
+endif
+
+" Commands
+
+" CD to the file's directory
+com! CD lcd %:p:h
+" Stupid shift key fix
+com! Wq wq
+
+
+" Disable last search highlight
+map <Space> :noh<cr>

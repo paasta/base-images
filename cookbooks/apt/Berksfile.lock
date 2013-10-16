@@ -1,0 +1,16 @@
+{
+  "sources": {
+    "apt": {
+      "path": "."
+    },
+    "minitest-handler": {
+      "locked_version": "0.2.1"
+    },
+    "apt_test": {
+      "path": "./test/cookbooks/apt_test"
+    },
+    "chef_handler": {
+      "locked_version": "1.1.4"
+    }
+  }
+}

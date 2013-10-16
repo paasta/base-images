@@ -3,7 +3,7 @@
     "base": {
       "locked_version": "1.0.0",
       "git": "git://github.com/zimbatm/base-cookbook.git",
-      "ref": "401d854dbadf6eea4c912c698e5534f9ed09467c"
+      "ref": "d6d9e8873f1a54de464ff154f42191be6d779b4f"
     },
     "apt": {
       "locked_version": "2.2.0"

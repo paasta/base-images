@@ -1,4 +1,3 @@
 *.pem
 /vars.json
 /packer_cache/*
-/cookbooks/*
