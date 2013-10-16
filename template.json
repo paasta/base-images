@@ -28,7 +28,14 @@
       "type": "chef-solo",
       "install_command": "true",
       "cookbook_paths": ["cookbooks"],
-      "run_list": ["recipe[base]"]
+      "run_list": ["recipe[base]"],
+      "json": {
+        "base": {
+          "login": {
+            "user": "mediacore"
+          }
+        }
+      }
     },
     {
       "type": "shell",
