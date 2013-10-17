@@ -10,37 +10,34 @@
      "aws_secret_key": "",
      "aws_cert_path": "",
      "aws_key_path": "",
-     "aws_s3_bucket": ""
+     "aws_s3_bucket": "",
+     "chef_version": "11.6.2",
+     "login_user": "login"
    },
   "provisioners": [
     {
-      "type": "shell",
-      "scripts": [
-        "scripts/base.sh",
-        "scripts/virtualbox.sh",
-        "scripts/vagrant.sh",
-        "scripts/amazon.sh",
-        "scripts/chef-prepare.sh"
-      ],
-      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
-    },
-    {
       "type": "chef-solo",
-      "skip_install": true,
+      "install_command": "wget -q -O- https://www.opscode.com/chef/install.sh | {{if .Sudo}}sudo {{end}}bash -s -- -v {{user `chef_version`}}",
       "cookbook_paths": ["cookbooks"],
       "run_list": ["recipe[base]"],
       "json": {
         "base": {
           "hostname": "unassigned-hostname",
           "login": {
-            "user": "mediacore"
+            "user": "{{ user `login_user`}}",
+            "authorized_keys": []
           }
         }
       }
     },
     {
       "type": "shell",
-      "script": "scripts/cleanup.sh",
+      "scripts": [
+        "scripts/virtualbox.sh",
+        "scripts/vagrant.sh",
+        "scripts/amazon.sh",
+        "scripts/cleanup.sh"
+      ],
       "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
     }
   ],

@@ -2,20 +2,14 @@
 
 One cookbook to rule them all...
 
-Basic config for all the machines. This is where we put things that
-we expect to have on all the machines.
-
-This cookbook was created with `berks cookbook base --vagrant --git
---foodcritic -L mit -m "Jonas Pfenniger" -e jonas@pfenniger.name` and then
-adapted.
+Makes sure all the systems have the same base. Used in the "base-image"
+project to procuse AMIs and vagrant boxes. Your app should also include it in
+case the reference image is out of date.
 
 Verification of the cookbook's structure is done by running
-`thor foodcritic:lint`.
+`foodcritic .`
 
 Testing of the cookbook is done by running `vagrant up`
-
-The "./bootstrap" file might act as an example on how to initialize the
-boxes.
 
 # Requirements
 
@@ -24,36 +18,9 @@ Platform
 
 * Ubuntu Precise
 
-Cookbooks
----------
-
-The following Opscode cookbooks are dependencies:
-
-* build-essential
-* git
-* logrotate
-* motd-tail
-* openssh
-* python
-
 # Usage
 
-Put base:default it as first include in all runs.
-
-# Attributes
-
-None yet
-
-# Recipes
-
-default
--------
-
-hostname
---------
-
-Sets the machine's hostname to `node[:machine_base][:hostname]` or use
-some sane defaults.
+Put base::default it as first include_recipe in all runs.
 
 # Author
 

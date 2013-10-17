@@ -38,7 +38,6 @@ cookbook_file "/etc/default/rsyslog" do
   mode 0644
 end
 
-include_recipe "logrotate"
 cookbook_file "/etc/logrotate.d/rsyslog" do
   source "rsyslog.logrotate"
   owner "root"

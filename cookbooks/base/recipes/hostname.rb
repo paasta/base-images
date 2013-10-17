@@ -4,6 +4,7 @@
 #
 # Copyright (C) 2013 Jonas Pfenniger
 #
+
 file "/etc/hostname" do
   mode 0644
   content "#{node.base.hostname}\n"
