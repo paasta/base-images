@@ -11,8 +11,7 @@
      "aws_cert_path": "",
      "aws_key_path": "",
      "aws_s3_bucket": "",
-     "chef_version": "11.6.2",
-     "login_user": "login"
+     "chef_version": "11.6.2"
    },
   "provisioners": [
     {
@@ -22,11 +21,7 @@
       "run_list": ["recipe[base]"],
       "json": {
         "base": {
-          "hostname": "unassigned-hostname",
-          "login": {
-            "user": "{{ user `login_user`}}",
-            "authorized_keys": []
-          }
+          "hostname": "unassigned-hostname"
         }
       }
     },

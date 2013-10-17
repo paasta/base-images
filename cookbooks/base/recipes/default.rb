@@ -28,6 +28,9 @@ include_recipe "base::berkshelf"
 # Configure root and it's tools
 include_recipe "base::sysadmin"
 
+# Configures OpenSSH
+include_recipe "base::openssh"
+
 # Configure the remote login user
 include_recipe "base::login"
 
