@@ -1,2 +1,2 @@
 site :opscode
-cookbook 'base', github: 'zimbatm/base-cookbook'
+cookbook 'base', github: 'paasta/base-cookbook'

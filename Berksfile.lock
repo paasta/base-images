@@ -2,7 +2,7 @@
   "sources": {
     "base": {
       "locked_version": "1.0.0",
-      "git": "git://github.com/zimbatm/base-cookbook.git",
+      "git": "git://github.com/paasta/base-cookbook.git",
       "ref": "20eaaf2b21455b46429ab20c566e98cbe3427e6f"
     },
     "apt": {
