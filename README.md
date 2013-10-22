@@ -32,8 +32,9 @@ packer build -var-file=vars.json -only=virtualbox template.json
 # cloud-init config example
 http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/view/head:/doc/examples/cloud-config.txt
 
-TODO
-----
 
-* amazon-instance build is broken. waiting on release of packer v0.3.9+
+NOTES
+------
+
+amazon-instance build is broken in packer versions older than v0.3.10
 
