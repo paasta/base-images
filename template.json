@@ -1,72 +1,33 @@
 {
-   "variables": {
-     "name": "base",
-     "aws_source_ami_instance": "ami-ad3660c4",
-     "aws_source_ami_ebs": "ami-a73264ce",
-     "aws_region": "us-east-1",
-     "aws_instance_type": "m1.small",
-     "aws_account_id": "",
-     "aws_access_key": "",
-     "aws_secret_key": "",
-     "aws_cert_path": "",
-     "aws_key_path": "",
-     "aws_s3_bucket": "",
-     "chef_version": "11.6.2"
-   },
-  "provisioners": [
-    {
-      "type": "chef-solo",
-      "install_command": "wget -q -O- https://www.opscode.com/chef/install.sh | {{if .Sudo}}sudo {{end}}bash -s -- -v {{user `chef_version`}}",
-      "cookbook_paths": ["cookbooks"],
-      "run_list": ["recipe[base]"],
-      "json": {
-        "base": {
-          "hostname": "unassigned-hostname"
-        }
-      }
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "scripts/virtualbox.sh",
-        "scripts/vagrant.sh",
-        "scripts/amazon.sh",
-        "scripts/cleanup.sh"
-      ],
-      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
-    }
-  ],
   "builders": [
     {
-      "type": "amazon-instance",
-      "ami_name": "{{user `name`}}-instance-{{timestamp}}",
+      "access_key": "{{user `aws_access_key`}}",
       "account_id": "{{user `aws_account_id`}}",
-      "access_key": "{{user `aws_access_key`}}",
-      "secret_key": "{{user `aws_secret_key`}}",
-      "region": "{{user `aws_region`}}",
-      "source_ami": "{{user `aws_source_ami_instance`}}",
-      "instance_type": "{{user `aws_instance_type`}}",
-      "s3_bucket": "{{user `aws_s3_bucket`}}",
-      "x509_cert_path": "{{user `aws_cert_path`}}",
-      "x509_key_path": "{{user `aws_key_path`}}",
-      "ssh_username": "ubuntu",
+      "ami_name": "{{user `name`}}-instance-{{timestamp}}",
       "bundle_destination": "/mnt",
-      "user_data_file": "cloud-init"
-    },
-    {
-      "type": "amazon-ebs",
-      "ami_name": "{{user `name`}}-ebs-{{timestamp}}",
-      "access_key": "{{user `aws_access_key`}}",
-      "secret_key": "{{user `aws_secret_key`}}",
-      "region": "{{user `aws_region`}}",
-      "source_ami": "{{user `aws_source_ami_ebs`}}",
       "instance_type": "{{user `aws_instance_type`}}",
+      "region": "{{user `aws_region`}}",
+      "s3_bucket": "{{user `aws_s3_bucket`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "source_ami": "{{user `aws_source_ami_instance`}}",
       "ssh_username": "ubuntu",
+      "type": "amazon-instance",
+      "user_data_file": "cloud-init",
+      "x509_cert_path": "{{user `aws_cert_path`}}",
+      "x509_key_path": "{{user `aws_key_path`}}"
+    },
+    {
+      "access_key": "{{user `aws_access_key`}}",
+      "ami_name": "{{user `name`}}-ebs-{{timestamp}}",
+      "instance_type": "{{user `aws_instance_type`}}",
+      "region": "{{user `aws_region`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "source_ami": "{{user `aws_source_ami_ebs`}}",
+      "ssh_username": "ubuntu",
+      "type": "amazon-ebs",
       "user_data_file": "cloud-init"
     },
     {
-      "type": "virtualbox",
-      "vm_name": "{{user `name`}}",
       "boot_command": [
         "<esc><esc><enter><wait>",
         "/install/vmlinuz noapic ",
@@ -81,18 +42,62 @@
       "disk_size": 10000,
       "guest_os_type": "Ubuntu_64",
       "http_directory": "http",
-      "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso",
       "iso_checksum": "2cbe868812a871242cdcdd8f2fd6feb9",
       "iso_checksum_type": "md5",
-      "ssh_username": "vagrant",
+      "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso",
+      "shutdown_command": "echo $USER | sudo -S shutdown -P now",
       "ssh_password": "vagrant",
-      "shutdown_command": "echo $USER | sudo -S shutdown -P now"
+      "ssh_username": "vagrant",
+      "type": "virtualbox",
+      "vm_name": "{{user `name`}}"
     }
   ],
   "post-processors": [
     {
-      "type": "vagrant",
-      "output": "{{user `name`}}-{{.BuildName}}.box"
+      "output": "{{user `name`}}-{{.BuildName}}.box",
+      "type": "vagrant"
     }
-  ]
+  ],
+  "provisioners": [
+    {
+      "cookbook_paths": [
+        "cookbooks"
+      ],
+      "install_command": "wget -q -O- https://www.opscode.com/chef/install.sh | {{if .Sudo}}sudo {{end}}bash -s -- -v {{user `chef_version`}}",
+      "json": {
+        "base": {
+          "hostname": "unassigned-hostname"
+        }
+      },
+      "run_list": [
+        "recipe[base]"
+      ],
+      "type": "chef-solo"
+    },
+    {
+      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'",
+      "scripts": [
+        "scripts/virtualbox.sh",
+        "scripts/vagrant.sh",
+        "scripts/amazon.sh",
+        "scripts/cleanup.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "aws_access_key": "",
+    "aws_account_id": "",
+    "aws_cert_path": "",
+    "aws_instance_type": "m1.small",
+    "aws_key_path": "",
+    "aws_region": "us-east-1",
+    "aws_s3_bucket": "",
+    "aws_secret_key": "",
+    "aws_source_ami_ebs": "ami-a73264ce",
+    "aws_source_ami_instance": "ami-ad3660c4",
+    "chef_version": "11.6.2",
+    "name": "base"
+  }
 }
+
