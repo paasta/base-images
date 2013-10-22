@@ -60,6 +60,11 @@
   ],
   "provisioners": [
     {
+      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'",
+      "script": "scripts/vagrant.sh",
+      "type": "shell"
+    },
+    {
       "cookbook_paths": [
         "cookbooks"
       ],
@@ -78,7 +83,6 @@
       "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'",
       "scripts": [
         "scripts/virtualbox.sh",
-        "scripts/vagrant.sh",
         "scripts/amazon.sh",
         "scripts/cleanup.sh"
       ],
