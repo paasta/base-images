@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+packer build -var-file vars.json "$@" template.json
