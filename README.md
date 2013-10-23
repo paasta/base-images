@@ -32,9 +32,9 @@ packer build -var-file=vars.json -only=virtualbox template.json
 # cloud-init config example
 http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/view/head:/doc/examples/cloud-config.txt
 
-
 NOTES
 ------
 
-amazon-instance build is broken in packer versions older than v0.3.10
+* amazon-instance build is broken in packer versions older than v0.3.10
+* uuid generation is monotonic in v0.3.10
 

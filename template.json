@@ -13,9 +13,10 @@
       ],
       "access_key": "{{user `aws_access_key`}}",
       "account_id": "{{user `aws_account_id`}}",
-      "ami_name": "{{user `name`}}-{{user `version`}}-amd64-{{timestamp}}-instance",
-      "bundle_prefix": "{{user `name`}}-{{user `version`}}-amd64-{{timestamp}}-instance",
+      "ami_name": "{{user `build_id`}}-instance",
+      "ami_groups": ["all"],
       "bundle_destination": "/mnt",
+      "bundle_prefix": "{{user `build_id`}}-instance",
       "instance_type": "{{user `aws_instance_type`}}",
       "region": "{{user `aws_region`}}",
       "s3_bucket": "{{user `aws_s3_bucket`}}",
@@ -42,7 +43,8 @@
         "us-west-2"
       ],
       "access_key": "{{user `aws_access_key`}}",
-      "ami_name": "{{user `name`}}-{{user `version`}}-amd64-{{timestamp}}-ebs",
+      "ami_name": "{{user `build_id`}}-ebs",
+      "ami_groups": ["all"],
       "security_group_id": "default",
       "instance_type": "{{user `aws_instance_type`}}",
       "region": "{{user `aws_region`}}",
@@ -53,7 +55,6 @@
       "tags": {
         "OS_Version": "Ubuntu"
       },
-      "temporary_key_pair_name": "packer {{uuid}} ebs",
       "user_data_file": "cloud-init"
     },
     {
@@ -78,12 +79,12 @@
       "ssh_password": "vagrant",
       "ssh_username": "vagrant",
       "type": "virtualbox",
-      "vm_name": "{{user `name`}}"
+      "vm_name": "{{user `build_id`}}"
     }
   ],
   "post-processors": [
     {
-      "output": "{{user `name`}}-{{user `version`}}-amd64-{{timestamp}}-{{.BuildName}}.box",
+      "output": "{{user `build_id`}}-{{.BuildName}}.box",
       "type": "vagrant"
     }
   ],
@@ -122,16 +123,15 @@
     "aws_access_key": "",
     "aws_account_id": "",
     "aws_cert_path": "",
-    "aws_instance_type": "m1.small",
+    "aws_instance_type": "m1.xlarge",
     "aws_key_path": "",
     "aws_region": "us-east-1",
     "aws_s3_bucket": "",
     "aws_secret_key": "",
     "aws_source_ami_ebs": "ami-a73264ce",
     "aws_source_ami_instance": "ami-ad3660c4",
-    "chef_version": "11.6.2",
-    "name": "base",
-    "version": "0.1.0"
+    "build_id": "base-0.1.0-amd64-20131023",
+    "chef_version": "11.6.2"
   }
 }
 
