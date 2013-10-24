@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+#
+# Transforms YAML into JSON
+
+require 'json'
+require 'yaml'
+
+puts YAML.load($stdin.read).to_json(JSON::PRETTY_STATE_PROTOTYPE.to_h)

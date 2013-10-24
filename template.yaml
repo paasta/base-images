@@ -1,0 +1,106 @@
+---
+builders:
+- ami_regions:
+  - ap-northeast-1
+  - ap-southeast-1
+  - ap-southeast-2
+  - eu-west-1
+  - sa-east-1
+  - us-west-1
+  - us-west-2
+  access_key: '{{user `aws_access_key`}}'
+  account_id: '{{user `aws_account_id`}}'
+  ami_name: '{{user `build_id`}}-instance'
+  ami_groups:
+  - all
+  bundle_destination: /mnt
+  bundle_prefix: '{{user `build_id`}}-instance'
+  instance_type: '{{user `aws_instance_type`}}'
+  region: us-east-1
+  s3_bucket: '{{user `aws_s3_bucket`}}'
+  secret_key: '{{user `aws_secret_key`}}'
+  source_ami: '{{user `aws_source_ami_instance`}}'
+  ssh_username: ubuntu
+  type: amazon-instance
+  tags:
+    OS_Version: Ubuntu
+  user_data_file: cloud-init
+  x509_cert_path: '{{user `aws_cert_path`}}'
+  x509_key_path: '{{user `aws_key_path`}}'
+- ami_regions:
+  - ap-northeast-1
+  - ap-southeast-1
+  - ap-southeast-2
+  - eu-west-1
+  - sa-east-1
+  - us-west-1
+  - us-west-2
+  access_key: '{{user `aws_access_key`}}'
+  ami_name: '{{user `build_id`}}-ebs'
+  ami_groups:
+  - all
+  security_group_id: default
+  instance_type: '{{user `aws_instance_type`}}'
+  region: us-east-1
+  secret_key: '{{user `aws_secret_key`}}'
+  source_ami: '{{user `aws_source_ami_ebs`}}'
+  ssh_username: ubuntu
+  type: amazon-ebs
+  tags:
+    OS_Version: Ubuntu
+  user_data_file: cloud-init
+- boot_command:
+  - <esc><esc><enter><wait>
+  - '/install/vmlinuz noapic '
+  - 'preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed-precise64.cfg '
+  - 'debian-installer=en_US auto locale=en_US kbd-chooser/method=us '
+  - 'hostname={{ .Name }} '
+  - 'fb=false debconf/frontend=noninteractive '
+  - 'keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA '
+  - 'keyboard-configuration/variant=USA console-setup/ask_detect=false '
+  - initrd=/install/initrd.gz -- <enter>
+  disk_size: 10000
+  guest_os_type: Ubuntu_64
+  http_directory: http
+  iso_checksum: 2cbe868812a871242cdcdd8f2fd6feb9
+  iso_checksum_type: md5
+  iso_url: http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso
+  shutdown_command: echo $USER | sudo -S shutdown -P now
+  ssh_password: vagrant
+  ssh_username: vagrant
+  type: virtualbox
+  vm_name: '{{user `build_id`}}'
+post-processors:
+- output: '{{user `build_id`}}-{{.BuildName}}.box'
+  type: vagrant
+provisioners:
+- execute_command: "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
+  script: scripts/vagrant.sh
+  type: shell
+- cookbook_paths:
+  - cookbooks
+  install_command: "wget -q -O- https://www.opscode.com/chef/install.sh | {{if .Sudo}}sudo {{end}}bash -s -- -v {{user `chef_version`}}"
+  json:
+    base:
+      hostname: unassigned-hostname
+  run_list:
+  - recipe[base]
+  type: chef-solo
+- execute_command: "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
+  scripts:
+  - scripts/virtualbox.sh
+  - scripts/amazon.sh
+  - scripts/cleanup.sh
+  type: shell
+variables:
+  aws_access_key: ''
+  aws_account_id: ''
+  aws_cert_path: ''
+  aws_instance_type: m1.xlarge
+  aws_key_path: ''
+  aws_s3_bucket: ''
+  aws_secret_key: ''
+  aws_source_ami_ebs: ami-a73264ce
+  aws_source_ami_instance: ami-ad3660c4
+  build_id: base-0.1.0-amd64-20131023
+  chef_version: 11.6.2

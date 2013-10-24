@@ -13,7 +13,9 @@
       "access_key": "{{user `aws_access_key`}}",
       "account_id": "{{user `aws_account_id`}}",
       "ami_name": "{{user `build_id`}}-instance",
-      "ami_groups": ["all"],
+      "ami_groups": [
+        "all"
+      ],
       "bundle_destination": "/mnt",
       "bundle_prefix": "{{user `build_id`}}-instance",
       "instance_type": "{{user `aws_instance_type`}}",
@@ -42,7 +44,9 @@
       ],
       "access_key": "{{user `aws_access_key`}}",
       "ami_name": "{{user `build_id`}}-ebs",
-      "ami_groups": ["all"],
+      "ami_groups": [
+        "all"
+      ],
       "security_group_id": "default",
       "instance_type": "{{user `aws_instance_type`}}",
       "region": "us-east-1",
@@ -131,4 +135,3 @@
     "chef_version": "11.6.2"
   }
 }
-
