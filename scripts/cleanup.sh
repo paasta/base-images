@@ -27,7 +27,7 @@ echo "pre-up sleep 2" >> /etc/network/interfaces
 echo -n > /var/lib/update-notifier/updates-available
 
 # AWS builds the image separately and doesn't need the disc scrubbing
-if [ "$PACKER_BUILDER_TYPE" = "amazon-instance" ] || [ "$PACKER_BUILDER_TYPE" = "amazon-ebs" ]; then
+if [ "$PACKER_BUILDER_TYPE" = "amazon-instance" ]; then
   exit 0
 fi
 
