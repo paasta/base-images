@@ -3,6 +3,12 @@ Base images
 
 Project to create images to use in Vagrant and EC2.
 
+## Usage
+
+Check out the latest release: https://github.com/paasta/base-images/releases
+
+## Build
+
 Creates ubuntu image to use on Vagrant and EC2.
 
 
