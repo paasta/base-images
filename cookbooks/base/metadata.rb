@@ -7,6 +7,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "1.0.0"
 
 recipe           "base",           "Installs all the base recipes"
+recipe           "base::ansible",  "Installs ansible on the system"
 recipe           "base::app",      "Runtime environment for apps"
 recipe           "base::apt",      "Configures the system's APT source lists"
 recipe           "base::berkshelf","Installs berkshelf on the system"

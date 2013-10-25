@@ -19,6 +19,9 @@ include_recipe "base::mail"
 
 ### Order independent starting from here ###
 
+# Ansible
+include_recipe "base::ansible"
+
 # Base packages
 include_recipe "base::packages"
 

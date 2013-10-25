@@ -11,12 +11,7 @@ package "chrony"
 # Base python packages
 package "ipython"
 package "python-pip"
-package "python-simplejson"
 package "python-virtualenv"
-package "python-yaml"
-
-# Used by Ansible accelerate mode
-package "python-keyczar"
 
 # Packages we don't want
 %w[

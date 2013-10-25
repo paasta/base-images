@@ -3,7 +3,7 @@
     "base": {
       "locked_version": "1.0.0",
       "git": "git://github.com/paasta/base-cookbook.git",
-      "ref": "20eaaf2b21455b46429ab20c566e98cbe3427e6f"
+      "ref": "727e38ba3ce461491ce267396fad1b594b47c308"
     },
     "apt": {
       "locked_version": "2.2.0"
