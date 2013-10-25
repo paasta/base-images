@@ -24,6 +24,15 @@ builders:
   x509_key_path: '{{user `aws_key_path`}}'
   bundle_destination: /mnt
   bundle_prefix: '{{user `build_id`}}-instance'
+  bundle_vol_command: sudo -n ec2-bundle-vol
+    -k {{.KeyPath}}
+    -u {{.AccountId}}
+    -c {{.CertPath}}
+    -r {{.Architecture}}
+    -e {{.PrivatePath}}/*
+    -d {{.Destination}}
+    -p {{.Prefix}}
+    --include `find / -name "*.pem" | grep -v "^/mnt" | grep -v "^/home" | tr '\n' ','`
   s3_bucket: '{{user `aws_s3_bucket`}}'
 
 - type: amazon-ebs
