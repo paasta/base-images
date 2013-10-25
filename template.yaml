@@ -1,33 +1,15 @@
 ---
 builders:
-- ami_regions:
-  - ap-northeast-1
-  - ap-southeast-1
-  - ap-southeast-2
-  - eu-west-1
-  - sa-east-1
-  - us-west-1
-  - us-west-2
+- type: amazon-instance
   access_key: '{{user `aws_access_key`}}'
-  account_id: '{{user `aws_account_id`}}'
-  ami_name: '{{user `build_id`}}-instance'
-  ami_groups:
-  - all
-  bundle_destination: /mnt
-  bundle_prefix: '{{user `build_id`}}-instance'
+  secret_key: '{{user `aws_secret_key`}}'
   instance_type: '{{user `aws_instance_type`}}'
   region: us-east-1
-  s3_bucket: '{{user `aws_s3_bucket`}}'
-  secret_key: '{{user `aws_secret_key`}}'
   source_ami: '{{user `aws_source_ami_instance`}}'
   ssh_username: ubuntu
-  type: amazon-instance
-  tags:
-    OS_Version: Ubuntu
   user_data_file: cloud-init
-  x509_cert_path: '{{user `aws_cert_path`}}'
-  x509_key_path: '{{user `aws_key_path`}}'
-- ami_regions:
+  ami_name: '{{user `build_id`}}-instance'
+  ami_regions:
   - ap-northeast-1
   - ap-southeast-1
   - ap-southeast-2
@@ -35,20 +17,34 @@ builders:
   - sa-east-1
   - us-west-1
   - us-west-2
-  access_key: '{{user `aws_access_key`}}'
-  ami_name: '{{user `build_id`}}-ebs'
   ami_groups:
   - all
-  security_group_id: default
+  account_id: '{{user `aws_account_id`}}'
+  x509_cert_path: '{{user `aws_cert_path`}}'
+  x509_key_path: '{{user `aws_key_path`}}'
+  bundle_destination: /mnt
+  bundle_prefix: '{{user `build_id`}}-instance'
+  s3_bucket: '{{user `aws_s3_bucket`}}'
+
+- type: amazon-ebs
+  access_key: '{{user `aws_access_key`}}'
+  secret_key: '{{user `aws_secret_key`}}'
   instance_type: '{{user `aws_instance_type`}}'
   region: us-east-1
-  secret_key: '{{user `aws_secret_key`}}'
   source_ami: '{{user `aws_source_ami_ebs`}}'
   ssh_username: ubuntu
-  type: amazon-ebs
-  tags:
-    OS_Version: Ubuntu
   user_data_file: cloud-init
+  ami_name: '{{user `build_id`}}-ebs'
+  ami_regions:
+  - ap-northeast-1
+  - ap-southeast-1
+  - ap-southeast-2
+  - eu-west-1
+  - sa-east-1
+  - us-west-1
+  - us-west-2
+  ami_groups:
+  - all
 - boot_command:
   - <esc><esc><enter><wait>
   - '/install/vmlinuz noapic '
@@ -71,13 +67,14 @@ builders:
   type: virtualbox
   vm_name: '{{user `build_id`}}'
 post-processors:
-- output: '{{user `build_id`}}-{{.BuildName}}.box'
-  type: vagrant
+- type: vagrant
+  output: '{{user `build_id`}}-{{.BuildName}}.box'
 provisioners:
-- execute_command: "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
+- type: shell
+  execute_command: "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
   script: scripts/vagrant.sh
-  type: shell
-- cookbook_paths:
+- type: chef
+  cookbook_paths:
   - cookbooks
   install_command: "wget -q -O- https://www.opscode.com/chef/install.sh | {{if .Sudo}}sudo {{end}}bash -s -- -v {{user `chef_version`}}"
   json:
@@ -85,13 +82,13 @@ provisioners:
       hostname: unassigned-hostname
   run_list:
   - recipe[base]
-  type: chef-solo
-- execute_command: "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
+- type: shell
+  execute_command: "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
   scripts:
   - scripts/virtualbox.sh
   - scripts/amazon.sh
   - scripts/cleanup.sh
-  type: shell
+
 variables:
   aws_access_key: ''
   aws_account_id: ''
