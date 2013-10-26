@@ -1,0 +1,207 @@
+#!/usr/bin/env ruby
+#
+# Small complementary script to handle the publication of AMIs
+#
+# `gem install aws-sdk`
+
+require 'aws-sdk'
+require 'json'
+
+CONFIG = JSON.load open('vars.json')
+DEFAULT_REGION = 'us-east-1'
+
+def ec2(region = DEFAULT_REGION)
+  AWS::EC2.new(
+    access_key_id: CONFIG['aws_access_key'],
+    secret_access_key: CONFIG['aws_secret_key'],
+    region: region,
+  )
+end
+
+def s3(region = DEFAULT_REGION)
+  AWS::S3.new(
+    access_key_id: CONFIG['aws_access_key'],
+    secret_access_key: CONFIG['aws_secret_key'],
+    region: region,
+  )
+end
+
+def ec2_regions
+  @regions ||= ec2.regions.map(&:name).sort
+end
+
+def make_public(ec2, image)
+  retryable do
+    return if is_public(image)
+
+    image.permissions.public = true
+  end
+end
+
+def is_public(image)
+  # FIXME
+  image.permissions.public? && :public
+end
+
+def retryable(retries=3, count = [0], &block)
+  yield
+rescue => ex
+  count[0]+=1
+  puts "error: #{ex} - try: #{count[0]}"
+  if count[0] > retries
+    raise
+  else
+    retry
+  end
+end
+
+def destroy(image, region)
+  case image.root_device_type
+  when "instance-store"
+    bucket_name, prefix = image.location.split('/', 2)
+    storage = s3(region)
+    bucket = storage.buckets[bucket_name]
+    bucket.objects.with_prefix(prefix).each do |object|
+      retryable(5) do
+        puts "Deleting #{bucket_name}/#{File.dirname(prefix)}/#{object.key}"
+        object.delete
+      end
+    end
+
+    p image.deregister
+  when "ebs"
+    # TODO: remove EBS
+
+    image.deregister
+  else
+    fail "unknown root device type: #{image.root_device_type}"
+  end
+end
+
+# FIXME: should also find images that aren't "available"
+def find_image(key, region=DEFAULT_REGION)
+  ec2(region).images.with_owner('self').find do |image|
+    key == image.id || key == image.name
+  end
+end
+
+def show_image(image, region=DEFAULT_REGION)
+  if image.nil?
+    p [region, nil]
+  else
+    p [region, image.id, image.name, image.state, is_public(image) || :private]
+  end
+end
+
+def resolv_image_name(id)
+  fail 'image_name missing' unless id
+  image = find_image(id)
+  image ? image.name : id
+end
+
+case ARGV[0]
+when 'list'
+  reg = ARGV[1] || DEFAULT_REGION
+  ec2(reg).images.with_owner('self').each do |image|
+    show_image image, reg
+  end
+when 'ids'
+  image_name = resolv_image_name ARGV[1]
+
+  ec2_regions.each do |region|
+    image = find_image image_name, region
+    show_image image, region
+  end
+when 'publish'
+  image_id = ARGV[1] || fail('missing image_id')
+
+  base_image = find_image image_id
+  show_image base_image
+
+  images = {
+    DEFAULT_REGION => base_image.id
+  }
+
+  # Copy around
+  puts "*** Copying the image around ***"
+  regions_to_publish = ec2_regions - [DEFAULT_REGION]
+  regions_to_publish.each do |region|
+    image = find_image base_image.name, region
+    if image
+      images[region] = image.id
+      show_image image, region
+      next
+    end
+
+    conn = ec2(region)
+
+    resp = conn.client.copy_image(
+      source_region: DEFAULT_REGION,
+      source_image_id: base_image.id,
+      name: base_image.name,
+    )
+    image_id = resp[:image_id]
+    images[region] = image_id
+
+    show_image conn.images[image_id], region
+  end
+
+  puts "*** Making images public ***"
+  while images.any?
+    images.each_pair do |region, ami_id|
+      conn = ec2(region)
+      image = conn.images[ami_id]
+      if image.nil?
+        puts "#{region} - error, image not found"
+        next
+      end
+      if image.state != :available
+        puts "#{region} - image is not available - #{image.state}"
+        sleep 3
+        next
+      end
+      if make_public(conn, image)
+        puts "#{region} - #{image.id} - OK"
+      else
+        puts "#{region} - #{image.id} - skipped"
+      end
+      images.delete(region)
+    end
+  end
+
+when 'destroy'
+  image_name = resolv_image_name ARGV[1]
+
+  ec2_regions.each do |region|
+    image = find_image image_name, region
+    if image
+      puts "Destroying #{image.id} in region #{region}"
+      destroy image, region
+    else
+      puts "No AMI named #{image_name} found in region #{region}"
+    end
+  end
+when 'clean-snapshots'
+  ec2_regions.each do |region|
+    puts "For #{region}"
+    ec2(region).snapshots.with_owner('self').each do |snapshot|
+      begin
+        p snapshot.delete
+      rescue => ex
+        p ex
+      end
+    end
+  end
+else
+  puts "Usage: #{File.basename $0} <list|ids|publish|destroy|clean-snapshots>"
+  puts
+  puts " * list [region] - list all AMIs for a region"
+  puts " * ids <image_name> - find AMI across all regions"
+  puts " * publish <image_id> - copies an AMI across all regions and make them public"
+  puts " * destroy <image_name> - removes an AMI across all regions"
+  puts " * clean-snapshots - tries to remove all snapshots across all regions"
+  exit unless ARGV.size == 0
+  require 'irb'
+  require 'irb/completion'
+  IRB.start
+end

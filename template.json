@@ -5,29 +5,17 @@
       "access_key": "{{user `aws_access_key`}}",
       "secret_key": "{{user `aws_secret_key`}}",
       "instance_type": "{{user `aws_instance_type`}}",
-      "region": "us-east-1",
+      "region": "{{user `aws_region`}}",
       "source_ami": "{{user `aws_source_ami_instance`}}",
       "ssh_username": "ubuntu",
       "user_data_file": "cloud-init",
       "ami_name": "{{user `build_id`}}-instance",
-      "ami_regions": [
-        "ap-northeast-1",
-        "ap-southeast-1",
-        "ap-southeast-2",
-        "eu-west-1",
-        "sa-east-1",
-        "us-west-1",
-        "us-west-2"
-      ],
-      "ami_groups": [
-        "all"
-      ],
       "account_id": "{{user `aws_account_id`}}",
       "x509_cert_path": "{{user `aws_cert_path`}}",
       "x509_key_path": "{{user `aws_key_path`}}",
       "bundle_destination": "/mnt",
       "bundle_prefix": "{{user `build_id`}}-instance",
-      "bundle_vol_command": "sudo -n ec2-bundle-vol -k {{.KeyPath}} -u {{.AccountId}} -c {{.CertPath}} -r {{.Architecture}} -e {{.PrivatePath}}/* -d {{.Destination}} -p {{.Prefix}} --include `find / -name \"*.pem\" | grep -v \"^/mnt\" | grep -v \"^/home\" | tr '\\n' ','`",
+      "bundle_vol_command": "sudo -n ec2-bundle-vol -k {{.KeyPath}} -u {{.AccountId}} -c {{.CertPath}} -r {{.Architecture}} -e {{.PrivatePath}}/* -d {{.Destination}} -p {{.Prefix}} --include `sudo -n find / -name '*.gpg' -o -name '*.pem' | grep -v '^/mnt\\|^/home\\|^/tmp' | tr '\\n' ','`",
       "s3_bucket": "{{user `aws_s3_bucket`}}"
     },
     {
@@ -35,25 +23,14 @@
       "access_key": "{{user `aws_access_key`}}",
       "secret_key": "{{user `aws_secret_key`}}",
       "instance_type": "{{user `aws_instance_type`}}",
-      "region": "us-east-1",
+      "region": "{{user `aws_region`}}",
       "source_ami": "{{user `aws_source_ami_ebs`}}",
       "ssh_username": "ubuntu",
       "user_data_file": "cloud-init",
-      "ami_name": "{{user `build_id`}}-ebs",
-      "ami_regions": [
-        "ap-northeast-1",
-        "ap-southeast-1",
-        "ap-southeast-2",
-        "eu-west-1",
-        "sa-east-1",
-        "us-west-1",
-        "us-west-2"
-      ],
-      "ami_groups": [
-        "all"
-      ]
+      "ami_name": "{{user `build_id`}}-ebs"
     },
     {
+      "type": "virtualbox",
       "boot_command": [
         "<esc><esc><enter><wait>",
         "/install/vmlinuz noapic ",
@@ -74,7 +51,6 @@
       "shutdown_command": "echo $USER | sudo -S shutdown -P now",
       "ssh_password": "vagrant",
       "ssh_username": "vagrant",
-      "type": "virtualbox",
       "vm_name": "{{user `build_id`}}"
     }
   ],
@@ -91,7 +67,7 @@
       "script": "scripts/vagrant.sh"
     },
     {
-      "type": "chef",
+      "type": "chef-solo",
       "cookbook_paths": [
         "cookbooks"
       ],
@@ -103,7 +79,16 @@
       },
       "run_list": [
         "recipe[base]"
-      ]
+      ],
+      "override": {
+        "virtualbox": {
+          "json": {
+            "base": {
+              "hostname": "base-vagrant"
+            }
+          }
+        }
+      }
     },
     {
       "type": "shell",
@@ -121,11 +106,12 @@
     "aws_cert_path": "",
     "aws_instance_type": "m1.xlarge",
     "aws_key_path": "",
+    "aws_region": "us-east-1",
     "aws_s3_bucket": "",
     "aws_secret_key": "",
     "aws_source_ami_ebs": "ami-a73264ce",
     "aws_source_ami_instance": "ami-ad3660c4",
-    "build_id": "base-0.1.0-amd64-20131023",
+    "build_id": "base-0.2.0-amd64-20131023",
     "chef_version": "11.6.2"
   }
 }
