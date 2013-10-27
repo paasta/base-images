@@ -1,4 +1,6 @@
 *.box
 *.pem
+/cookbooks/*
 /packer_cache/*
+/tmp/*
 /vars.json

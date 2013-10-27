@@ -1,1 +1,0 @@
-default.base.loghost = nil

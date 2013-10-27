@@ -2,9 +2,8 @@
 prepare: cookbooks/.done
 prepare: template.json
 
-cookbooks/.done: Berksfile.lock
-	rm -rf cookbooks
-	berks install --path cookbooks
+cookbooks/.done: Cheffile Cheffile.lock
+	librarian-chef install
 	touch cookbooks/.done
 
 template.json: template.yaml
