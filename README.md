@@ -7,15 +7,14 @@ Project to create images to use in Vagrant and EC2.
 
 Check out the latest release: https://github.com/paasta/base-images/releases
 
-## Build
-
-Creates ubuntu image to use on Vagrant and EC2.
-
+## Build dependencies
 
 ```
-gem install berkshelf
 brew tap homebrew/binary
 brew install packer
+
+gem install bundler
+bundle
 ```
 
 Create a `vars.json` file:
@@ -30,17 +29,28 @@ Create a `vars.json` file:
 }
 ```
 
-Then run the build:
+## Build
+
+First run the packer wrapper script to build the images:
+
 ```
-packer build -var-file=vars.json -only=virtualbox template.json
+./build
 ```
 
-# cloud-init config example
-http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/view/head:/doc/examples/cloud-config.txt
+Use `./build -only=virtualbox` for example to build a single target.
+
+Once satisfied with the AMIs, use the `./ami` script to publish them to all
+the regions and make them public.
+
+```
+./ami publish <ami_id>
+```
+
+You can also destroy old releases, list images in a region or ids across all
+regions with the same script. Running `./ami` will show you the options.
 
 NOTES
 ------
 
-* amazon-instance build is broken in packer versions older than v0.3.10
-* uuid generation is monotonic in v0.3.10
+* uuid generation is broken in v0.3.10 causing issues in parallel builds
 
