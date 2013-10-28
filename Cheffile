@@ -1,5 +1,5 @@
 site "http://community.opscode.com/api/v1"
 
 cookbook "base",
-  git: 'https://github.com/paasta/base-cookbook'
-  #ref: 'v0.3.0'
+  git: 'https://github.com/paasta/base-cookbook',
+  ref: 'v0.3.0'

@@ -9,10 +9,10 @@ SITE
 
 GIT
   remote: https://github.com/paasta/base-cookbook
-  ref: master
-  sha: 9157275d24329c9ac0af92d84911bd035de661b5
+  ref: v0.3.0
+  sha: e5368f364a6e87fc7eb3344ea8711ca6f507b84e
   specs:
-    base (1.0.0)
+    base (0.3.0)
       apt (>= 0.0.0)
       logrotate (>= 0.0.0)
       openssh (>= 0.0.0)
