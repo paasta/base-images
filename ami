@@ -57,8 +57,9 @@ end
 
 def destroy(image, region)
   case image.root_device_type
-  when "instance-store"
-    bucket_name, prefix = image.location.split('/', 2)
+  when :instance_store
+    bucket_name, prefix = image.location.sub(/\.manifest\.xml$/, '').split('/', 2)
+
     storage = s3(region)
     bucket = storage.buckets[bucket_name]
     bucket.objects.with_prefix(prefix).each do |object|
@@ -69,7 +70,7 @@ def destroy(image, region)
     end
 
     p image.deregister
-  when "ebs"
+  when :ebs
     # TODO: remove EBS
 
     image.deregister
