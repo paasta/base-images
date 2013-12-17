@@ -8,6 +8,10 @@ apt-get -qy autoremove
 aptitude purge -y ~c
 apt-get clean
 
+# Cloud-init cleanup
+rm -f /var/lib/cloud/instance
+rm -rf /var/lib/cloud/instances/*
+
 # Removing leftover leases and persistent rules
 echo "*** cleaning up dhcp leases"
 rm -f /var/lib/dhcp/*
