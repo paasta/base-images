@@ -106,6 +106,17 @@ when 'list'
   ec2(reg).images.with_owner('self').each do |image|
     show_image image, reg
   end
+when 'links'
+  image_name = resolv_image_name ARGV[1]
+
+  ec2_regions.each do |region|
+    image = find_image image_name, region
+    puts "* [%<name>s %<region>s](https://console.aws.amazon.com/ec2/home?region=%<region>s#launchAmi=%<ami>s)" % {
+      region: region,
+      ami: image.id,
+      name: image.name,
+    }
+  end
 when 'ids'
   image_name = resolv_image_name ARGV[1]
 
@@ -197,6 +208,7 @@ else
   puts "Usage: #{File.basename $0} <list|ids|publish|destroy|clean-snapshots>"
   puts
   puts " * list [region] - list all AMIs for a region"
+  puts " * links <image_name> - returns the AWS console links in markdown format"
   puts " * ids <image_name> - find AMI across all regions"
   puts " * publish <image_id> - copies an AMI across all regions and make them public"
   puts " * destroy <image_name> - removes an AMI across all regions"
