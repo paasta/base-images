@@ -23,6 +23,14 @@ builders:
     -d {{.Destination}}
     -p {{.Prefix}}
     --include `sudo -n find / -name '*.gpg' -o -name '*.pem' | grep -v '^/mnt\|^/home\|^/tmp' | tr '\n' ','`
+  bundle_upload_command: sudo -n ec2-upload-bundle
+    -b {{.BucketName}}
+    -m {{.ManifestPath}}
+    -a {{.AccessKey}}
+    -s {{.SecretKey}}
+    -d {{.BundleDirectory}}
+    --batch
+    --retry
   s3_bucket: '{{user `aws_s3_bucket`}}'
 
 - type: amazon-ebs
