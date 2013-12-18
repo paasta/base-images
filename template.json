@@ -113,6 +113,6 @@
     "aws_source_ami_ebs": "ami-0568456c",
     "aws_source_ami_instance": "ami-bd6d40d4",
     "build_id": "base-0.3.0-amd64-20131028",
-    "chef_version": "11.6.2"
+    "chef_version": "11.8.2"
   }
 }
