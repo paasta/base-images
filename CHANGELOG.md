@@ -1,4 +1,16 @@
 
+0.4.0 / 2013-12-18 
+==================
+
+ * Updates chef to 11.8.2
+ * Use the latest Ubuntu precise 64 AMIs
+ * Updates the base cookbook to v0.4.0
+ * Fixes EC2 instance bundle upload with the new packer 0.4.1
+ * Remove old cloud-init info
+ * Better build instructions
+ * ./ami destroy fixes
+ * Simplify the cloud-init script
+
 0.3.0 / 2013-10-28 
 ==================
 
