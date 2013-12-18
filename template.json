@@ -110,8 +110,8 @@
     "aws_region": "us-east-1",
     "aws_s3_bucket": "",
     "aws_secret_key": "",
-    "aws_source_ami_ebs": "ami-a73264ce",
-    "aws_source_ami_instance": "ami-ad3660c4",
+    "aws_source_ami_ebs": "ami-0568456c",
+    "aws_source_ami_instance": "ami-bd6d40d4",
     "build_id": "base-0.3.0-amd64-20131028",
     "chef_version": "11.6.2"
   }
