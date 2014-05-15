@@ -1,16 +1,16 @@
 SITE
   remote: http://community.opscode.com/api/v1
   specs:
-    apt (2.3.0)
-    iptables (0.12.0)
-    logrotate (1.4.0)
-    openssh (1.3.0)
+    apt (2.3.10)
+    iptables (0.13.2)
+    logrotate (1.5.0)
+    openssh (1.3.4)
       iptables (>= 0.0.0)
 
 GIT
   remote: https://github.com/paasta/base-cookbook
-  ref: v0.4.0
-  sha: d881f8fb9a34616e10e7f9b76c9286e6d8c3f6b0
+  ref: v0.4.3
+  sha: a75f1490bd22e4c0c89372f33ae75aab2b75ad84
   specs:
     base (0.4.0)
       apt (>= 0.0.0)
