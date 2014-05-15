@@ -4,3 +4,4 @@
 /packer_cache/*
 /tmp/*
 /vars.json
+.envrc
