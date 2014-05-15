@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [ "$PACKER_BUILDER_TYPE" != "virtualbox" ] && [ "$PACKER_BUILDER_TYPE" != "vmware" ]; then
+if [ "$PACKER_BUILDER_TYPE" != "virtualbox-iso" ] && [ "$PACKER_BUILDER_TYPE" != "vmware" ]; then
   echo "Skipping, $PACKER_BUILDER_TYPE is not our target"
   exit 0
 fi

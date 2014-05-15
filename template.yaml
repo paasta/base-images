@@ -42,7 +42,9 @@ builders:
   ssh_username: ubuntu
   user_data_file: cloud-init
   ami_name: '{{user `build_id`}}-ebs'
-- type: virtualbox
+- type: virtualbox-iso
+  vboxmanage:
+      - modifyvm: '{{.Name}}, "--memory", "2048"'
   boot_command:
   - <esc><esc><enter><wait>
   - '/install/vmlinuz noapic '
@@ -55,10 +57,11 @@ builders:
   - initrd=/install/initrd.gz -- <enter>
   disk_size: 10000
   guest_os_type: Ubuntu_64
+  guest_additions_path: 'VBoxGuestAdditions_{{.Version}}.iso'
   http_directory: http
-  iso_checksum: 2cbe868812a871242cdcdd8f2fd6feb9
+  iso_checksum: e83adb9af4ec0a039e6a5c6e145a34de
   iso_checksum_type: md5
-  iso_url: http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso
+  iso_url: http://releases.ubuntu.com/12.04/ubuntu-12.04.4-server-amd64.iso
   shutdown_command: echo $USER | sudo -S shutdown -P now
   ssh_password: vagrant
   ssh_username: vagrant
@@ -80,10 +83,10 @@ provisioners:
   run_list:
   - recipe[base]
   override:
-    virtualbox:
-      json:
-        base:
-          hostname: base-vagrant
+      virtualbox-iso:
+        json:
+          base:
+            hostname: base-vagrant
 - type: shell
   execute_command: "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'"
   scripts:
