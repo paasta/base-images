@@ -98,12 +98,12 @@ variables:
   aws_access_key: ''
   aws_account_id: ''
   aws_cert_path: ''
-  aws_instance_type: m1.xlarge
+  aws_instance_type: c3.xlarge
   aws_key_path: ''
   aws_region: 'us-east-1'
   aws_s3_bucket: ''
   aws_secret_key: ''
   aws_source_ami_ebs: ami-0568456c
   aws_source_ami_instance: ami-bd6d40d4
-  build_id: base-0.4.0-amd64-20131218
+  build_id: base-0.4.1-amd64-20140513-1
   chef_version: 11.8.2
