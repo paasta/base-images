@@ -102,9 +102,20 @@ end
 
 case ARGV[0]
 when 'list'
-  reg = ARGV[1] || DEFAULT_REGION
-  ec2(reg).images.with_owner('self').each do |image|
-    show_image image, reg
+  if ARGV[1] == 'all'
+    regions = ec2_regions
+  else
+    regions = ARGV[1] || DEFAULT_REGION
+    regions = [regions]
+  end
+  regions.each do |region|
+    p "=-"*45
+    p "=- IMAGES IN %s =-" % region
+    ec2(region).images.with_owner('self').each do |image|
+      show_image image, region
+    end
+  p "=-"*45
+  p
   end
 when 'links'
   image_name = resolv_image_name ARGV[1]
