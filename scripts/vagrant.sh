@@ -23,5 +23,5 @@ wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/key
 chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
-# Install NFS for vagrant
-apt-get install -qy nfs-common
+rm -fR /var/lib/apt/lists/*
+apt-get update -q

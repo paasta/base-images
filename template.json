@@ -31,7 +31,15 @@
       "ami_name": "{{user `build_id`}}-ebs"
     },
     {
-      "type": "virtualbox",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+        ]
+      ],
       "boot_command": [
         "<esc><esc><enter><wait>",
         "/install/vmlinuz noapic ",
@@ -45,10 +53,11 @@
       ],
       "disk_size": 10000,
       "guest_os_type": "Ubuntu_64",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "http_directory": "http",
-      "iso_checksum": "2cbe868812a871242cdcdd8f2fd6feb9",
+      "iso_checksum": "769474248a3897f4865817446f9a4a53",
       "iso_checksum_type": "md5",
-      "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso",
+      "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.5-server-amd64.iso",
       "shutdown_command": "echo $USER | sudo -S shutdown -P now",
       "ssh_password": "vagrant",
       "ssh_username": "vagrant",
@@ -82,7 +91,7 @@
         "recipe[base]"
       ],
       "override": {
-        "virtualbox": {
+        "virtualbox-iso": {
           "json": {
             "base": {
               "hostname": "base-vagrant"
@@ -105,14 +114,14 @@
     "aws_access_key": "",
     "aws_account_id": "",
     "aws_cert_path": "",
-    "aws_instance_type": "m1.xlarge",
+    "aws_instance_type": "c3.xlarge",
     "aws_key_path": "",
     "aws_region": "us-east-1",
     "aws_s3_bucket": "",
     "aws_secret_key": "",
     "aws_source_ami_ebs": "ami-0568456c",
     "aws_source_ami_instance": "ami-bd6d40d4",
-    "build_id": "base-0.4.0-amd64-20131218",
+    "build_id": "base-0.4.2-amd64-20151022",
     "chef_version": "11.8.2"
   }
 }

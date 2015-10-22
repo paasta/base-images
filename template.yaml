@@ -44,7 +44,11 @@ builders:
   ami_name: '{{user `build_id`}}-ebs'
 - type: virtualbox-iso
   vboxmanage:
-      - modifyvm: '{{.Name}}, "--memory", "2048"'
+    -
+      - 'modifyvm'
+      - '{{.Name}}'
+      - '--memory'
+      - '2048'
   boot_command:
   - <esc><esc><enter><wait>
   - '/install/vmlinuz noapic '
@@ -59,9 +63,9 @@ builders:
   guest_os_type: Ubuntu_64
   guest_additions_path: 'VBoxGuestAdditions_{{.Version}}.iso'
   http_directory: http
-  iso_checksum: e83adb9af4ec0a039e6a5c6e145a34de
+  iso_checksum: 769474248a3897f4865817446f9a4a53
   iso_checksum_type: md5
-  iso_url: http://releases.ubuntu.com/12.04/ubuntu-12.04.4-server-amd64.iso
+  iso_url: http://releases.ubuntu.com/12.04/ubuntu-12.04.5-server-amd64.iso
   shutdown_command: echo $USER | sudo -S shutdown -P now
   ssh_password: vagrant
   ssh_username: vagrant
@@ -105,5 +109,5 @@ variables:
   aws_secret_key: ''
   aws_source_ami_ebs: ami-0568456c
   aws_source_ami_instance: ami-bd6d40d4
-  build_id: base-0.4.1-amd64-20140513-1
+  build_id: base-0.4.2-amd64-20151022
   chef_version: 11.8.2
