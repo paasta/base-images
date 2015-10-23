@@ -7,10 +7,8 @@ SITE
     openssh (1.5.2)
       iptables (>= 0.0.0)
 
-GIT
-  remote: https://github.com/paasta/base-cookbook
-  ref: v0.4.3
-  sha: a75f1490bd22e4c0c89372f33ae75aab2b75ad84
+PATH
+  remote: ../base-cookbook
   specs:
     base (0.4.0)
       apt (>= 0.0.0)

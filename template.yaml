@@ -110,4 +110,4 @@ variables:
   aws_source_ami_ebs: ami-0568456c
   aws_source_ami_instance: ami-bd6d40d4
   build_id: base-0.4.2-amd64-20151022
-  chef_version: 11.8.2
+  chef_version: 12.5.1
