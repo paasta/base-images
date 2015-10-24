@@ -80,7 +80,7 @@ provisioners:
 - type: chef-solo
   cookbook_paths:
   - cookbooks
-  install_command: "wget -q -O- https://www.opscode.com/chef/install.sh | {{if .Sudo}}sudo {{end}}bash -s -- -P chefdk -v {{user `chef_version`}}"
+  install_command: "curl -L https://www.chef.io/chef/install.sh | {{if .Sudo}}sudo {{end}}bash -s -- -P chefdk"
   json:
     base:
       hostname: unassigned-hostname

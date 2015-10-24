@@ -16,3 +16,4 @@ if [ "$PACKER_BUILDER_TYPE" = "amazon-instance" ]; then
   apt-get install -qy ec2-ami-tools
 fi
 
+apt-get install -y curl
