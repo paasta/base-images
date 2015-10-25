@@ -73,8 +73,11 @@
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'",
-      "script": "scripts/vagrant.sh"
+      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/apt.sh",
+        "scripts/vagrant.sh"
+      ]
     },
     {
       "type": "chef-solo",
@@ -102,7 +105,7 @@
     },
     {
       "type": "shell",
-      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E sh '{{.Path}}'",
+      "execute_command": "echo $USER | {{ .Vars }} sudo -S -E bash '{{.Path}}'",
       "scripts": [
         "scripts/virtualbox.sh",
         "scripts/amazon.sh",
