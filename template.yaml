@@ -98,6 +98,7 @@ provisioners:
   scripts:
   - scripts/virtualbox.sh
   - scripts/amazon.sh
+  - scripts/cgroups.sh
   - scripts/cleanup.sh
 
 variables:
