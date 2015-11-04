@@ -42,6 +42,7 @@ builders:
   ssh_username: ubuntu
   user_data_file: cloud-init
   ami_name: '{{user `build_id`}}-ebs'
+  ami_virtualization_type: 'hvm'
 - type: virtualbox-iso
   vboxmanage:
     -
